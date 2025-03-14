@@ -10,7 +10,7 @@ export default function Home() {
   const startTask = async () => {
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:4000/api/start-task', {
+      const response = await fetch('https://sse.brijesh.dev/api/start-task', {
         method: 'POST'
       })
       const data = await response.json()

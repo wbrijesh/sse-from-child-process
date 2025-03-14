@@ -13,7 +13,7 @@
 //     setUpdates([])
 
 //     // Start listening for updates
-//     const eventSource = new EventSource(`http://localhost:4000/api/task-updates/${taskId}`)
+//     const eventSource = new EventSource(`https://localhost:4000/api/task-updates/${taskId}`)
     
 //     eventSource.onmessage = (event) => {
 //       const update = JSON.parse(event.data)
@@ -65,7 +65,7 @@ export default function TaskPage({ params }: { params: Promise<{ taskId: string 
     // Clear updates only when taskId changes, not on every mount
     setUpdates([])
     
-    const eventSource = new EventSource(`http://localhost:4000/api/task-updates/${taskId}`)
+    const eventSource = new EventSource(`https://sse.brijesh.dev/api/task-updates/${taskId}`)
     
     eventSource.onmessage = (event) => {
       const update = JSON.parse(event.data)
