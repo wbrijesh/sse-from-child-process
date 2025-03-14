@@ -1,53 +1,35 @@
 'use client';
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  const [taskId, setTaskId] = useState<string | null>(null)
-  const [updates, setUpdates] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
   
   const startTask = async () => {
     try {
+      setLoading(true)
       const response = await fetch('http://localhost:4000/api/start-task', {
         method: 'POST'
       })
       const data = await response.json()
-      setTaskId(data.taskId)
-      setUpdates([`Task started with ID: ${data.taskId}`])
       
-      // Start listening for updates
-      const eventSource = new EventSource(`http://localhost:4000/api/task-updates/${data.taskId}`)
-      
-      eventSource.onmessage = (event) => {
-        const update = JSON.parse(event.data)
-        setUpdates(prev => [...prev, update.message])
-        
-        if (update.progress === 100) {
-          eventSource.close()
-        }
-      }
-      
-      eventSource.onerror = () => {
-        eventSource.close()
-      }
+      // Redirect to the task details page
+      router.push(`/${data.taskId}`)
     } catch (error) {
       console.error('Error starting task:', error)
+    } finally {
+      setLoading(false)
     }
   }
   
   return (
     <div style={{ padding: '20px' }}>
       <h1>SSE Long Task Example</h1>
-      <button onClick={startTask} disabled={!!taskId}>
-        Start Long Task
+      <button onClick={startTask} disabled={loading}>
+        {loading ? 'Creating task...' : 'Start Long Task'}
       </button>
-      
-      <div style={{ marginTop: '20px' }}>
-        <h2>Updates:</h2>
-        {updates.map((update, index) => (
-          <p key={index}>{update}</p>
-        ))}
-      </div>
     </div>
   )
 }

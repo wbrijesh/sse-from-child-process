@@ -1,9 +1,8 @@
 "use strict";
 process.on('message', ({ taskId }) => {
     let progress = 0;
-    // Simulate work with progress updates
     const interval = setInterval(() => {
-        progress += 2;
+        progress += 0.1;
         if (process.send) {
             process.send({
                 taskId,
@@ -22,5 +21,5 @@ process.on('message', ({ taskId }) => {
             }
             process.exit();
         }
-    }, 1000); // Send update every 1 seconds
+    }, 1000);
 });
