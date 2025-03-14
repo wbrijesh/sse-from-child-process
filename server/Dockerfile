@@ -31,8 +31,8 @@ RUN pnpm install --frozen-lockfile --prod=false
 # Copy application code
 COPY . .
 
-# Build application
-RUN pnpm run build
+# Build application using TypeScript compiler
+RUN npx tsc --project tsconfig.json
 
 # Remove development dependencies
 RUN pnpm prune --prod
@@ -46,4 +46,4 @@ COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "pnpm", "run", "start" ]
+CMD [ "node", "dist/index.js" ]
